@@ -35,20 +35,22 @@ class CustomerService(val customerRepository: CustomerRepository) {
     }
 
     fun createCustomer(customer: Customer): Customer {
-        if (!phoneNumberRegex.matches(customer.phoneNumber) && customer.phoneNumber.length < 10)
-            throw InvalidEmailOrPhoneNumberException("Invalid phone number format")
+        return when {
+            !phoneNumberRegex.matches(customer.phoneNumber) && customer.phoneNumber.length < 10 ->
+                throw InvalidEmailOrPhoneNumberException("Invalid phone number format")
 
-        if (!emailRegex.matches(customer.email))
-            throw InvalidEmailOrPhoneNumberException("Invalid email format")
+            !emailRegex.matches(customer.email) -> throw InvalidEmailOrPhoneNumberException("Invalid email format")
 
-        if (customerRepository.findByEmail(customer.email) != null)
-            throw CustomerHasAlreadyExistException("Customer with such email has already exist")
+            customerRepository.findByEmail(customer.email) != null ->
+                throw CustomerHasAlreadyExistException("Customer with such email has already exist")
 
-        if (customerRepository.findByPhoneNumber(customer.phoneNumber) != null)
-            throw CustomerHasAlreadyExistException("Customer with such phone number has already exist")
-
-        logger.info { "Customer created with email : ${customer.email}" }
-        return customerRepository.save(customer)
+            customerRepository.findByPhoneNumber(customer.phoneNumber) != null ->
+                throw CustomerHasAlreadyExistException("Customer with such phone number has already exist")
+            else -> {
+                logger.info { "Customer created with email : ${customer.email}" }
+                customerRepository.save(customer)
+            }
+        }
     }
 
     fun deleteCustomer(id: Long) {
