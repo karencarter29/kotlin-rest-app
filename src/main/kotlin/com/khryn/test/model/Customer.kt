@@ -12,25 +12,17 @@ data class Customer(
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long,
+    val id: Long,
     @Column(name = "firstName")
-    private val firstName: String,
+    val firstName: String,
     @Column(name = "lastName")
-    private val lastName: String,
+    val lastName: String,
     @Column(name = "phoneNumber")
-    private val phoneNumber: String,
+    val phoneNumber: String,
     @Column(name = "email")
-    private val email: String,
+    val email: String,
     @Column(name = "app")
-    private val app: String,
+    val app: String,
     @Column(name = "date")
-    private val date: LocalDate = LocalDate.now()
-) {
-    fun getId(): Long = id
-    fun getFirstName(): String = firstName
-    fun getLastName(): String = lastName
-    fun getPhoneNumber(): String = phoneNumber
-    fun getEmail(): String = email
-    fun getApp(): String = app
-    fun getDate(): LocalDate = date
-}
+    val date: LocalDate = LocalDate.now()
+)
